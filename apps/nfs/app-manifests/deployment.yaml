@@ -1,0 +1,50 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: nfs-server
+  namespace: nfs
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: nfs-server
+  template:
+    metadata:
+      labels:
+        app: nfs-server
+    spec:
+      containers:
+      - name: nfs-server
+        image: erichough/nfs-server:2.2.1
+        ports:
+        - name: nfs
+          containerPort: 2049
+        securityContext:
+          capabilities:
+            add:
+              - SYS_ADMIN
+        env:
+        - name: NFS_VERSION
+          value: "4"
+        volumeMounts:
+        - name: share
+          mountPath: /share
+        - name: nfs-exports
+          mountPath: /etc/exports
+          subPath: exports
+        resources:
+          requests:
+            cpu: 100m
+            memory: 128Mi
+          limits:
+            cpu: 500m
+            memory: 512Mi
+      volumes:
+      - name: share
+        persistentVolumeClaim:
+          claimName: nfs-share
+      - name: nfs-exports
+        configMap:
+          name: nfs-exports-cm
+

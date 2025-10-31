@@ -1,0 +1,8 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: nfs-exports-cm
+  namespace: nfs
+data:
+  exports: |
+    /share 192.168.4.0/22(rw,sync,no_subtree_check,root_squash,fsid=0)

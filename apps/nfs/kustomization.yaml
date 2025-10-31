@@ -1,0 +1,9 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+resources:
+  - app-manifests/namespace.yaml
+  - app-manifests/exports-cm.yaml
+  - app-manifests/pvc.yaml
+  - app-manifests/service.yaml
+  - app-manifests/deployment.yaml
