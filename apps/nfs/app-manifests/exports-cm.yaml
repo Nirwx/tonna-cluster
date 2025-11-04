@@ -5,4 +5,4 @@ metadata:
   namespace: nfs
 data:
   exports: |
-    /share 192.168.4.0/22(rw,sync,no_subtree_check,root_squash,fsid=0)
+    /share *(rw,sync,no_subtree_check,all_squash,anonuid=1000,anongid=1000,fsid=0)
