@@ -26,7 +26,9 @@ spec:
               - SYS_ADMIN
         env:
         - name: NFS_VERSION
-          value: "4"
+          value: "4.2"
+        - name: NFS_DISABLE_VERSION_3
+          value: true
         volumeMounts:
         - name: share
           mountPath: /share
@@ -40,6 +42,13 @@ spec:
           limits:
             cpu: 500m
             memory: 512Mi
+      initContainers:
+      - name: fix-permissions
+        image: busybox:1.37
+        command: ['sh', '-c', 'chown -R 1000:1000 /share && chmod 770 /share']
+        volumeMounts:
+        - name: share
+          mountPath: /share
       volumes:
       - name: share
         persistentVolumeClaim:
@@ -47,4 +56,3 @@ spec:
       - name: nfs-exports
         configMap:
           name: nfs-exports-cm
-
